@@ -2,7 +2,19 @@
 
 The app is a single container (FastAPI serving the built React UI plus the January snapshot). No database, no secrets, no environment variables required.
 
-## Heroku (container stack, recommended: uses the Dockerfile as-is)
+## Render (free web service, uses the Dockerfile as-is)
+
+One web service, not two. The Dockerfile builds the React UI and serves it from the same FastAPI process, so frontend and backend deploy together.
+
+1. Push the repository to GitHub.
+2. In Render, choose New, then Blueprint, and select the repository. Render reads `render.yaml` (Docker runtime, free plan, health check at `/api/health`).
+3. Wait for the build, then open the URL Render gives you. Check `<url>/api/health` returns `{"status":"ok"}`.
+
+Free services sleep after 15 minutes without traffic, and the first visit after that can take about a minute. The disk is temporary, which is fine because the app only reads its committed data.
+
+**Not yet verified:** `render.yaml` has not been tested against Render, and the Docker image has not been built on this machine.
+
+## Heroku (container stack, uses the Dockerfile as-is; paid dyno only)
 
 ```bash
 heroku login
